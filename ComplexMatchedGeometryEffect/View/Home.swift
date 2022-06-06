@@ -125,6 +125,11 @@ struct Home: View {
                                         withAnimation(.easeInOut(duration: 0.4).delay(0.05)) {
                                             isExpanded = false
                                         }
+                                        
+                                        //MARK: Resetting After Animation Completes
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                            offset = .zero
+                                        }
                                     } else {
                                         withAnimation(.easeInOut(duration: 0.4)) {
                                             offset = .zero

@@ -28,6 +28,11 @@ struct Home: View {
             .navigationTitle("WhatApp")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        .overlay(content: {
+            Color.black
+                .opacity(isLoadExpandedContent ? 1 : 0)
+                .ignoresSafeArea()
+        })
         .overlay{
             if let expandedProfile = expandedProfile,isExpanded {
                 ExpandedView(profile: expandedProfile)
@@ -81,8 +86,6 @@ struct Home: View {
                 .foregroundColor(.gray)
         }
         .padding(.horizontal)
-        .blur(radius: isLoadExpandedContent ? 3 : 0)
-        .disabled(isLoadExpandedContent)
     }
     
     //MARK: Expanded View
@@ -104,14 +107,6 @@ struct Home: View {
                         .cornerRadius(isLoadExpandedContent ? 0 : size.height)
                     //2. IF WE USE AFTER CLIP IT WILL UN POSITION THE VIEW
     //2.                    .matchedGeometryEffect(id: profile.id, in: animation)
-                        .onTapGesture {
-                            withAnimation(.easeInOut(duration: 4)) {
-                                isLoadExpandedContent = false
-                            }
-                            withAnimation(.easeInOut(duration: 4).delay(0.05)) {
-                                isExpanded = false
-                            }
-                        }
                 }
                 //3. WORKAROUND WRAP IT INSIDE GEOMETRY READER AND APPLY BEFORE FRAME
                 //3.
@@ -119,6 +114,29 @@ struct Home: View {
                 .frame(height: 300)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .overlay(alignment: .top, content: {
+                HStack(spacing: 10) {
+                    Button {
+                        withAnimation(.easeInOut(duration: 4)) {
+                            isLoadExpandedContent = false
+                        }
+                        withAnimation(.easeInOut(duration: 4).delay(0.05)) {
+                            isExpanded = false
+                        }
+                    } label: {
+                        Image(systemName: "arrow.left")
+                            .font(.title3)
+                            .foregroundColor(.white)
+                    }
+                    
+                    Text(profile.username)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                    
+                    Spacer(minLength: 10)
+                }
+                .padding()
+            })
             //FOR MORE CLEAN TRANSITION USE TRANSITION WITH OFFSET
             //FOR MORE ABOUT MATCHED GEOMETRY TRANSITION
             .transition(.offset(x: 0, y: 1))

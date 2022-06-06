@@ -16,6 +16,9 @@ struct Home: View {
     //SEE ANIMATION HACK VIDEO
     @State var isLoadExpandedContent: Bool = false
     
+    //MARK: GESTURE PROPERTIES
+    @State var offset: CGSize = .zero
+    
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
@@ -64,7 +67,7 @@ struct Home: View {
                 }
             }
             .onTapGesture {
-                withAnimation(.easeInOut(duration: 4)) {
+                withAnimation(.easeInOut(duration: 0.4)) {
                     isExpanded = true
                     expandedProfile = profile
                 }
@@ -107,6 +110,28 @@ struct Home: View {
                         .cornerRadius(isLoadExpandedContent ? 0 : size.height)
                     //2. IF WE USE AFTER CLIP IT WILL UN POSITION THE VIEW
     //2.                    .matchedGeometryEffect(id: profile.id, in: animation)
+                        .offset(y: isLoadExpandedContent ? offset.height : .zero)
+                        .gesture(
+                            DragGesture()
+                                .onChanged({ value in
+                                    offset = value.translation
+                                }).onChanged({ value in
+                                    let height = value.translation.height
+                                    if height > 0 && height > 100 {
+                                        //MARK: Close View
+                                        withAnimation(.easeInOut(duration: 0.4)) {
+                                            isLoadExpandedContent = false
+                                        }
+                                        withAnimation(.easeInOut(duration: 0.4).delay(0.05)) {
+                                            isExpanded = false
+                                        }
+                                    } else {
+                                        withAnimation(.easeInOut(duration: 0.4)) {
+                                            offset = .zero
+                                        }
+                                    }
+                                })
+                        )
                 }
                 //3. WORKAROUND WRAP IT INSIDE GEOMETRY READER AND APPLY BEFORE FRAME
                 //3.
@@ -117,10 +142,10 @@ struct Home: View {
             .overlay(alignment: .top, content: {
                 HStack(spacing: 10) {
                     Button {
-                        withAnimation(.easeInOut(duration: 4)) {
+                        withAnimation(.easeInOut(duration: 0.4)) {
                             isLoadExpandedContent = false
                         }
-                        withAnimation(.easeInOut(duration: 4).delay(0.05)) {
+                        withAnimation(.easeInOut(duration: 0.4).delay(0.05)) {
                             isExpanded = false
                         }
                     } label: {
@@ -136,13 +161,14 @@ struct Home: View {
                     Spacer(minLength: 10)
                 }
                 .padding()
+                .opacity(isLoadExpandedContent ? 1 : 0)
             })
             //FOR MORE CLEAN TRANSITION USE TRANSITION WITH OFFSET
             //FOR MORE ABOUT MATCHED GEOMETRY TRANSITION
             .transition(.offset(x: 0, y: 1))
             .onAppear {
                 //DURATION 4 IS FOR TESTING
-                withAnimation(.easeInOut(duration: 4)) {
+                withAnimation(.easeInOut(duration: 0.4)) {
                     isLoadExpandedContent = true
                 }
             }

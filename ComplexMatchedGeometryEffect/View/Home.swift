@@ -34,6 +34,7 @@ struct Home: View {
         .overlay(content: {
             Color.black
                 .opacity(isLoadExpandedContent ? 1 : 0)
+                .opacity(offsetProgress())
                 .ignoresSafeArea()
         })
         .overlay{
@@ -127,7 +128,7 @@ struct Home: View {
                                         }
                                         
                                         //MARK: Resetting After Animation Completes
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                                             offset = .zero
                                         }
                                     } else {
@@ -167,6 +168,7 @@ struct Home: View {
                 }
                 .padding()
                 .opacity(isLoadExpandedContent ? 1 : 0)
+                .opacity(offsetProgress())
             })
             //FOR MORE CLEAN TRANSITION USE TRANSITION WITH OFFSET
             //FOR MORE ABOUT MATCHED GEOMETRY TRANSITION
@@ -177,6 +179,16 @@ struct Home: View {
                     isLoadExpandedContent = true
                 }
             }
+    }
+    
+    //MARK: Offset Progress
+    func offsetProgress() -> CGFloat {
+        let progress = offset.height / 100
+        if offset.height < 0 {
+            return 1
+        } else {
+            return 1 - (progress < 1 ? progress : 1)
+        }
     }
 }
 

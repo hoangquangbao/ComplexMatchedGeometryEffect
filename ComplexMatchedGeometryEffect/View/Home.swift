@@ -68,7 +68,7 @@ struct Home: View {
                 }
             }
             .onTapGesture {
-                withAnimation(.easeInOut(duration: 0.4)) {
+                withAnimation(.easeInOut(duration: 0.6)) {
                     isExpanded = true
                     expandedProfile = profile
                 }
@@ -120,19 +120,19 @@ struct Home: View {
                                     let height = value.translation.height
                                     if height > 0 && height > 100 {
                                         //MARK: Close View
-                                        withAnimation(.easeInOut(duration: 0.4)) {
+                                        withAnimation(.easeInOut(duration: 0.6)) {
                                             isLoadExpandedContent = false
                                         }
-                                        withAnimation(.easeInOut(duration: 0.4).delay(0.05)) {
+                                        withAnimation(.easeInOut(duration: 0.6).delay(0.05)) {
                                             isExpanded = false
                                         }
                                         
                                         //MARK: Resetting After Animation Completes
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
                                             offset = .zero
                                         }
                                     } else {
-                                        withAnimation(.easeInOut(duration: 0.4)) {
+                                        withAnimation(.easeInOut(duration: 0.6)) {
                                             offset = .zero
                                         }
                                     }
@@ -148,10 +148,10 @@ struct Home: View {
             .overlay(alignment: .top, content: {
                 HStack(spacing: 10) {
                     Button {
-                        withAnimation(.easeInOut(duration: 0.4)) {
+                        withAnimation(.easeInOut(duration: 0.6)) {
                             isLoadExpandedContent = false
                         }
-                        withAnimation(.easeInOut(duration: 0.4).delay(0.05)) {
+                        withAnimation(.easeInOut(duration: 0.6).delay(0.05)) {
                             isExpanded = false
                         }
                     } label: {
@@ -175,7 +175,7 @@ struct Home: View {
             .transition(.offset(x: 0, y: 1))
             .onAppear {
                 //DURATION 4 IS FOR TESTING
-                withAnimation(.easeInOut(duration: 0.4)) {
+                withAnimation(.easeInOut(duration: 0.6)) {
                     isLoadExpandedContent = true
                 }
             }

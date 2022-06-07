@@ -24,3 +24,4 @@ var profile = [
     Profile(username: "Van Tren", profilePicture: "VanTren_ProfilePicture", lastMsg: "Nui Rung", lastActive: "09:23 AM"),
     Profile(username: "Quang Bao", profilePicture: "QuangBao_ProfilePicture", lastMsg: "iOS", lastActive: "06:30 AM")
 ]
+
